@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音增强模型效果展示</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            color: #333; 
+            background-color: #f9f9f9;
+        }
+        h1, h2 { text-align: center; }
+        .description { text-align: center; margin-bottom: 40px; color: #666; }
+        
+        /* 表格样式美化 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+        th, td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            width: 50%; /* 左右各占一半 */
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        /* 图片和音频播放器样式 */
+        .spectrogram {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px; /* 图片和播放器之间的间距 */
+        }
+        audio {
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎙️ 语音增强 (Speech Enhancement) 模型展示</h1>
+    <p class="description">请戴上耳机体验。下方展示了带噪语音与本模型处理后的纯净语音，以及对应的语谱图对比。</p>
+
+    <h2>测试集样例 1：街道背景噪声 (Street Noise)</h2>
+    <table>
+        <tr>
+            <th>带噪原声 (Noisy Baseline)</th>
+            <th>模型增强后 (Ours Enhanced)</th>
+        </tr>
+        <tr>
+            <td>
+                <img class="spectrogram" src="images/noisy_1.png" alt="带噪语谱图">
+                <br>
+                <audio controls>
+                    <source src="audios/noisy_1.wav" type="audio/wav">
+                    您的浏览器不支持音频播放。
+                </audio>
+            </td>
+            <td>
+                <img class="spectrogram" src="images/enhanced_1.png" alt="增强后语谱图">
+                <br>
+                <audio controls>
+                    <source src="audios/enhanced_1.wav" type="audio/wav">
+                    您的浏览器不支持音频播放。
+                </audio>
+            </td>
+        </tr>
+    </table>
+
+    <h2>测试集样例 2：咖啡厅人声干扰 (Babble Noise)</h2>
+    <table>
+        <tr>
+            <th>带噪原声 (Noisy Baseline)</th>
+            <th>模型增强后 (Ours Enhanced)</th>
+        </tr>
+        <tr>
+            <td>
+                <img class="spectrogram" src="images/noisy_2.png" alt="带噪语谱图">
+                <br>
+                <audio controls>
+                    <source src="audios/noisy_2.wav" type="audio/wav">
+                </audio>
+            </td>
+            <td>
+                <img class="spectrogram" src="images/enhanced_2.png" alt="增强后语谱图">
+                <br>
+                <audio controls>
+                    <source src="audios/enhanced_2.wav" type="audio/wav">
+                </audio>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
