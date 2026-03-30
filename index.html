@@ -3,110 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>语音增强模型效果展示</title>
+    <title>Speech Enhancement Results</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            color: #333; 
-            background-color: #f9f9f9;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            color: #333;
         }
-        h1, h2 { text-align: center; }
-        .description { text-align: center; margin-bottom: 40px; color: #666; }
-        
-        /* 表格样式美化 */
+        .container {
+            max-width: 1600px; /* 加宽容器以适应 8 个模型列 */
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto; /* 当屏幕不够宽时允许横向滚动 */
+            margin-bottom: 40px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 50px;
+            text-align: center;
+            min-width: 1200px; /* 保证表格最小宽度，防止播放器变形 */
         }
         th, td {
-            padding: 20px;
-            text-align: center;
+            padding: 12px 8px;
+            vertical-align: middle;
             border-bottom: 1px solid #eee;
-            width: 50%; /* 左右各占一半 */
         }
         th {
-            background-color: #f1f5f9;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1.05em;
+            background-color: #f8f9fa;
+            color: #2c3e50;
         }
-        /* 图片和音频播放器样式 */
-        .spectrogram {
-            width: 100%;
-            max-width: 400px;
-            height: auto;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            margin-bottom: 15px; /* 图片和播放器之间的间距 */
+        .condition-col {
+            font-weight: bold;
+            text-align: left;
+            white-space: nowrap;
+            color: #555;
+            font-size: 0.9em;
         }
+        .file-name {
+            font-size: 0.8em;
+            color: #888;
+            font-weight: normal;
+            display: block;
+            margin-top: 4px;
+        }
+        /* 压缩原生的音频播放器宽度，适应多列展示 */
         audio {
-            width: 100%;
-            max-width: 400px;
+            width: 140px;
+            height: 36px;
             outline: none;
         }
+        /* 美化滚动条 */
+        .table-wrapper::-webkit-scrollbar { height: 8px; }
+        .table-wrapper::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .table-wrapper::-webkit-scrollbar-track { background: #f1f1f1; }
     </style>
 </head>
 <body>
 
-    <h1>🎙️ 语音增强 (Speech Enhancement) 模型展示</h1>
-    <p class="description">请戴上耳机体验。下方展示了带噪语音与本模型处理后的纯净语音，以及对应的语谱图对比。</p>
+<div class="container">
+    <h1>Speech Enhancement Results Comparison</h1>
 
-    <h2>测试集样例 1：街道背景噪声 (Street Noise)</h2>
-    <table>
-        <tr>
-            <th>带噪原声 (Noisy Baseline)</th>
-            <th>模型增强后 (Ours Enhanced)</th>
-        </tr>
-        <tr>
-            <td>
-                <img class="spectrogram" src="images/noisy_1.png" alt="带噪语谱图">
-                <br>
-                <audio controls>
-                    <source src="audios/noisy_1.wav" type="audio/wav">
-                    您的浏览器不支持音频播放。
-                </audio>
-            </td>
-            <td>
-                <img class="spectrogram" src="images/enhanced_1.png" alt="增强后语谱图">
-                <br>
-                <audio controls>
-                    <source src="audios/enhanced_1.wav" type="audio/wav">
-                    您的浏览器不支持音频播放。
-                </audio>
-            </td>
-        </tr>
-    </table>
+    <h2>DNS-Challenge</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Condition (SNR)</th>
+                    <th>Noisy</th>
+                    <th>Clean</th>
+                    <th>CMGAN</th>
+                    <th>MP-SENet</th>
+                    <th>SEMAmba</th>
+                    <th>Mamba-SEUNet</th>
+                    <th>PrimeK-Net</th>
+                    <th>TSRH-Net</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="condition-col">-15.0 dB<span class="file-name">11.wav</span></td>
+                    <td><audio controls src="./audio/dns/11_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/11_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">-10.0 dB<span class="file-name">84.wav</span></td>
+                    <td><audio controls src="./audio/dns/84_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/84_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">-5.0 dB<span class="file-name">94.wav</span></td>
+                    <td><audio controls src="./audio/dns/94_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/dns/94_tsrhnet.wav"></audio></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <h2>测试集样例 2：咖啡厅人声干扰 (Babble Noise)</h2>
-    <table>
-        <tr>
-            <th>带噪原声 (Noisy Baseline)</th>
-            <th>模型增强后 (Ours Enhanced)</th>
-        </tr>
-        <tr>
-            <td>
-                <img class="spectrogram" src="images/noisy_2.png" alt="带噪语谱图">
-                <br>
-                <audio controls>
-                    <source src="audios/noisy_2.wav" type="audio/wav">
-                </audio>
-            </td>
-            <td>
-                <img class="spectrogram" src="images/enhanced_2.png" alt="增强后语谱图">
-                <br>
-                <audio controls>
-                    <source src="audios/enhanced_2.wav" type="audio/wav">
-                </audio>
-            </td>
-        </tr>
-    </table>
+    <h2>NoiseX-92</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Condition (SNR)</th>
+                    <th>Noisy</th>
+                    <th>Clean</th>
+                    <th>CMGAN</th>
+                    <th>MP-SENet</th>
+                    <th>SEMAmba</th>
+                    <th>Mamba-SEUNet</th>
+                    <th>PrimeK-Net</th>
+                    <th>TSRH-Net</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="condition-col">Factory / -1.0 dB<span class="file-name">0002_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0002_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0002_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">Babble / -3.0 dB<span class="file-name">0083_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0083_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0083_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">Machinegun / -5.0 dB<span class="file-name">0021_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0021_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0021_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">Babble / -6.0 dB<span class="file-name">0031_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0031_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0031_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">Buccaneer / -9.0 dB<span class="file-name">0041_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0041_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0041_tsrhnet.wav"></audio></td>
+                </tr>
+                <tr>
+                    <td class="condition-col">Destroyerops / -10.0 dB<span class="file-name">0048_clean...</span></td>
+                    <td><audio controls src="./audio/noisex/0048_noisy.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_clean.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_cmgan.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_mpsenet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_semamba.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_mamba_seunet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_primeknet.wav"></audio></td>
+                    <td><audio controls src="./audio/noisex/0048_tsrhnet.wav"></audio></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </body>
 </html>
